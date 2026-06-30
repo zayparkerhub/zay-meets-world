@@ -1,4 +1,4 @@
-export type Tab = 'explore' | 'love'
+export type Tab = 'explore' | 'love' | 'support'
 export type LovePathway = 'sponsor' | 'commit' | 'idea' | 'community'
 
 export interface ContactFields {

@@ -75,7 +75,7 @@ function useChips(initial: string[] = []) {
 /* ─────────────────────────── main page ────────────────────────── */
 
 export default function Page() {
-  const [tab, setTab] = useState<'explore' | 'love'>('explore')
+  const [tab, setTab] = useState<'explore' | 'love' | 'support'>('explore')
   const [lovePathway, setLovePathway] = useState<string | null>(null)
 
   // Explore extras
@@ -214,7 +214,7 @@ export default function Page() {
     return () => { document.body.classList.remove('love-mode') }
   }, [tab])
 
-  const switchTab = (t: 'explore' | 'love') => {
+  const switchTab = (t: 'explore' | 'love' | 'support') => {
     setTab(t)
     setLovePathway(null)
     setLoveSuccess(null)
@@ -308,17 +308,23 @@ export default function Page() {
     <div>
 
       {/* Floating emojis */}
-      <div className={`float-layer${tab === 'love' ? ' hidden' : ''}`}>
+      <div className={`float-layer${tab !== 'explore' ? ' hidden' : ''}`}>
         <span className="f f1">🧭</span><span className="f f2">✈️</span><span className="f f3">📍</span>
         <span className="f f4">⭐</span><span className="f f5">🌄</span><span className="f f6">🗺️</span>
         <span className="f f7">⚡</span><span className="f f8">🧭</span><span className="f f9">✈️</span>
         <span className="f f10">🌟</span><span className="f f11">📍</span><span className="f f12">⭐</span>
       </div>
-      <div className={`float-layer${tab === 'explore' ? ' hidden' : ''}`}>
+      <div className={`float-layer${tab !== 'love' ? ' hidden' : ''}`}>
         <span className="f f1">❤️</span><span className="f f2">🤍</span><span className="f f3">❤️</span>
         <span className="f f4">💛</span><span className="f f5">❤️</span><span className="f f6">🩷</span>
         <span className="f f7">❤️</span><span className="f f8">💕</span><span className="f f9">❤️</span>
         <span className="f f10">🤍</span><span className="f f11">💗</span><span className="f f12">❤️</span>
+      </div>
+      <div className={`float-layer${tab !== 'support' ? ' hidden' : ''}`}>
+        <span className="f f1">💛</span><span className="f f2">✨</span><span className="f f3">💛</span>
+        <span className="f f4">🌟</span><span className="f f5">💛</span><span className="f f6">✨</span>
+        <span className="f f7">💛</span><span className="f f8">🙌</span><span className="f f9">💛</span>
+        <span className="f f10">✨</span><span className="f f11">💛</span><span className="f f12">🌟</span>
       </div>
 
       {/* Hero */}
@@ -328,16 +334,21 @@ export default function Page() {
         <div className="toggle-label">Where are you joining?</div>
         <div className="toggle-wrap">
           <button className={`toggle-btn${tab === 'explore' ? ' active' : ''}`} onClick={() => switchTab('explore')}>
-            🏃‍♂️ Send or join me somewhere
+            🏃‍♂️ Explore
           </button>
           <button className={`toggle-btn${tab === 'love' ? ' active' : ''}`} onClick={() => switchTab('love')}>
-            ❤️ Join the love
+            ❤️ Love
+          </button>
+          <button className={`toggle-btn${tab === 'support' ? ' active' : ''}`} onClick={() => switchTab('support')}>
+            💛 Support
           </button>
         </div>
         <div className="toggle-sub">
           {tab === 'explore'
-            ? 'Tell me where to go and who to meet in your city.'
-            : 'Join the movement. Spread love however feels right to you.'}
+            ? 'Send me somewhere or join me on the road.'
+            : tab === 'love'
+            ? 'Join the movement. Spread love however feels right to you.'
+            : 'Help keep the journey going.'}
         </div>
       </div>
 
@@ -519,35 +530,42 @@ export default function Page() {
 
           {/* ── Sponsor ── */}
           {lovePathway === 'sponsor' && (
-            loveSuccess === 'sponsor' ? (
-              <div className="step-card success show">
-                <div className="si">💛</div>
-                <div className="st">You&apos;re part of this now.</div>
-                <div className="sb">Send whatever feels right through any of these. It all goes toward keeping this moving and making moments happen for real people out there.</div>
+            <div className="pf on">
+              {/* Payment links always show first */}
+              <div className="step-card">
+                <span className="step-pill pill-l">Step 2</span>
+                <div className="step-title">Send what feels right</div>
+                <div className="step-sub">Whatever you give goes toward keeping this moving and the good it creates along the way.</div>
                 <div className="pay-links">
                   <a className="pl" href="https://venmo.com/zaymeetsworld" target="_blank" rel="noreferrer">💚 Venmo @zaymeetsworld</a>
                   <a className="pl" href="https://cash.app/$zaymeetsworld" target="_blank" rel="noreferrer">💵 Cash App $zaymeetsworld</a>
                   <a className="pl" href="https://paypal.me/zaymeetsworld" target="_blank" rel="noreferrer">🅿️ PayPal.me/zaymeetsworld</a>
                 </div>
               </div>
-            ) : (
-              <form ref={sponsorFormRef} onSubmit={e => { e.preventDefault(); submitLove('sponsor', sponsorFormRef, { note: fd(sponsorFormRef.current, 'note') }) }} className="pf on" noValidate>
-                <input type="text" name="website" tabIndex={-1} autoComplete="off" style={{display:'none'}} />
+
+              {/* Optional contact — stays until they submit */}
+              {loveSuccess === 'sponsor' ? (
                 <div className="step-card">
-                  <span className="step-pill pill-l">Step 2</span>
-                  <div className="step-title">Who are you?</div>
+                  <div className="si" style={{fontSize:32,marginBottom:8}}>💛</div>
+                  <div className="step-title">We got you. Thank you.</div>
+                </div>
+              ) : (
+                <form ref={sponsorFormRef} onSubmit={e => { e.preventDefault(); submitLove('sponsor', sponsorFormRef, { note: fd(sponsorFormRef.current, 'note') }) }} className="step-card" noValidate>
+                  <input type="text" name="website" tabIndex={-1} autoComplete="off" style={{display:'none'}} />
+                  <span className="step-pill pill-l">Optional</span>
+                  <div className="step-title">Let us know who you are</div>
+                  <div className="step-sub">Totally fine to stay anonymous — we&apos;re grateful either way.</div>
                   <ContactFields />
                   <div className="field">
-                    <label>A note for Zay <span className="opt">optional</span></label>
+                    <label>A note <span className="opt">optional</span></label>
                     <textarea name="note" placeholder="Dedicate it to someone, tell us what kind of act, or just say hi..." />
                   </div>
-                  <p className="priv">Your contribution — whatever you give — supports the journey and the good it does along the way.</p>
                   {err && <p className="form-error">{err}</p>}
-                  <button className="sub-btn" type="submit" disabled={loading}>{loading ? 'Sending...' : 'Send love →'}</button>
-                </div>
-                <LoveExtras />
-              </form>
-            )
+                  <button className="sub-btn" type="submit" disabled={loading}>{loading ? 'Sending...' : 'Say hi →'}</button>
+                </form>
+              )}
+              <LoveExtras />
+            </div>
           )}
 
           {/* ── Join me (community) ── */}
@@ -655,6 +673,46 @@ export default function Page() {
                 </div>
               </form>
             )
+          )}
+
+        </div>
+      </div>
+
+      {/* ══ SUPPORT PANEL ══ */}
+      <div className={`panel explore-panel${tab === 'support' ? ' active' : ''}`}>
+        <div className="form-wrap">
+
+          <div className="step-card">
+            <span className="step-pill pill-e">Support</span>
+            <div className="step-title">Help keep the journey going</div>
+            <div className="step-sub">This is an open-source trip filmed and funded by people who believe in it. Anything you put in goes toward making more of it happen — for the road, for the people we meet, for whatever comes next.</div>
+            <div className="pay-links" style={{marginTop:20}}>
+              <a className="pl" href="https://venmo.com/zaymeetsworld" target="_blank" rel="noreferrer">💚 Venmo @zaymeetsworld</a>
+              <a className="pl" href="https://cash.app/$zaymeetsworld" target="_blank" rel="noreferrer">💵 Cash App $zaymeetsworld</a>
+              <a className="pl" href="https://paypal.me/zaymeetsworld" target="_blank" rel="noreferrer">🅿️ PayPal.me/zaymeetsworld</a>
+            </div>
+          </div>
+
+          {/* Optional contact */}
+          {loveSuccess === 'support' ? (
+            <div className="step-card">
+              <div className="si" style={{fontSize:32,marginBottom:8}}>✨</div>
+              <div className="step-title">We got you. Thank you.</div>
+            </div>
+          ) : (
+            <form ref={sponsorFormRef} onSubmit={e => { e.preventDefault(); submitLove('support', sponsorFormRef, { note: fd(sponsorFormRef.current, 'note') }) }} className="step-card" noValidate>
+              <input type="text" name="website" tabIndex={-1} autoComplete="off" style={{display:'none'}} />
+              <span className="step-pill pill-e">Optional</span>
+              <div className="step-title">Want to say who you are?</div>
+              <div className="step-sub">No pressure — stay anonymous or drop your info and we&apos;ll reach out.</div>
+              <ContactFields />
+              <div className="field">
+                <label>A note <span className="opt">optional</span></label>
+                <textarea name="note" placeholder="What made you want to contribute? Or just say hi..." />
+              </div>
+              {err && <p className="form-error">{err}</p>}
+              <button className="sub-btn" type="submit" disabled={loading}>{loading ? 'Sending...' : 'Say hi →'}</button>
+            </form>
           )}
 
         </div>
