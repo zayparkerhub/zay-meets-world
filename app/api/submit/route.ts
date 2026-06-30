@@ -115,8 +115,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: error.message ?? 'Failed to save' }, { status: 500 })
     }
 
-    // Fire-and-forget Telegram notification
-    sendTelegram(buildTelegramMessage(body))
+    // Send Telegram notification before responding
+    await sendTelegram(buildTelegramMessage(body))
 
     return NextResponse.json({ ok: true })
   } catch (err) {
