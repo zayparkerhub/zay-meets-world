@@ -62,6 +62,47 @@ body.love-mode { background: var(--love); }
 @keyframes drift4 { 0%,100%{transform:translate(0,0) rotate(0deg)} 25%{transform:translate(-10px,10px) rotate(8deg)} 75%{transform:translate(12px,-8px) rotate(-5deg)} }
 @keyframes drift5 { 0%,100%{transform:translate(0,0)} 40%{transform:translate(-15px,-12px)} 80%{transform:translate(10px,18px)} }
 @keyframes up { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } }
+@keyframes bounce-down { 0%,100%{transform:translateY(0);opacity:.5} 50%{transform:translateY(10px);opacity:1} }
+
+/* ── Landing page ── */
+.landing-cards {
+  display: flex;
+  gap: 14px;
+  width: 100%;
+  max-width: 620px;
+}
+.landing-card {
+  flex: 1;
+  border-radius: 22px;
+  padding: 26px 22px 24px;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.landing-card:hover { transform: translateY(-4px); }
+.landing-card-join { background: #fff; }
+.landing-card-join:hover { box-shadow: 0 16px 48px rgba(0,0,0,0.35); }
+.landing-card-back { background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.15); }
+.landing-card-back:hover { background: rgba(255,255,255,0.12); box-shadow: 0 16px 48px rgba(0,0,0,0.4); }
+.landing-arrows {
+  display: flex;
+  justify-content: center;
+  gap: 220px;
+  margin-bottom: 6px;
+}
+.arrow-bounce {
+  font-size: 22px;
+  animation: bounce-down 1.5s ease-in-out infinite;
+}
+.arrow-bounce-r {
+  font-size: 22px;
+  animation: bounce-down 1.5s ease-in-out 0.25s infinite;
+}
+@media (max-width: 520px) {
+  .landing-cards { flex-direction: column; max-width: 400px; }
+  .landing-arrows { gap: 120px; }
+}
 
 /* ── Top / Hero ── */
 .top {

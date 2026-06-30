@@ -5,7 +5,7 @@ import Link from 'next/link'
 export default function LandingPage() {
   return (
     <div style={{
-      background: '#FF6600',
+      background: '#0C0C14',
       minHeight: '100vh',
       fontFamily: 'var(--font-dm-sans), DM Sans, system-ui, sans-serif',
       display: 'flex',
@@ -16,20 +16,20 @@ export default function LandingPage() {
 
       {/* Floating emojis */}
       <div className="float-layer">
-        <span className="f f1">🧭</span><span className="f f2">❤️</span><span className="f f3">📍</span>
+        <span className="f f1">🛣️</span><span className="f f2">❤️</span><span className="f f3">🤝</span>
         <span className="f f4">💛</span><span className="f f5">🌄</span><span className="f f6">🩷</span>
-        <span className="f f7">✈️</span><span className="f f8">🤍</span><span className="f f9">⭐</span>
-        <span className="f f10">💕</span><span className="f f11">🗺️</span><span className="f f12">💛</span>
+        <span className="f f7">✈️</span><span className="f f8">🤍</span><span className="f f9">🌟</span>
+        <span className="f f10">🫶</span><span className="f f11">🗺️</span><span className="f f12">💫</span>
       </div>
 
-      {/* Main content */}
+      {/* Main */}
       <div style={{
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '48px 20px 32px',
+        padding: '52px 20px 28px',
         position: 'relative',
         zIndex: 10,
       }}>
@@ -38,23 +38,23 @@ export default function LandingPage() {
         <div style={{
           fontSize: 11,
           fontWeight: 700,
-          letterSpacing: '0.12em',
+          letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          color: 'rgba(255,255,255,0.65)',
-          marginBottom: 20,
+          color: 'rgba(255,255,255,0.35)',
+          marginBottom: 22,
           textAlign: 'center',
         }}>
-          Open-source documentary · Every US state
+          Hitchhiking across America · Open-source documentary
         </div>
 
         {/* Brand */}
         <div style={{
-          fontSize: 'clamp(13px, 3vw, 16px)',
+          fontSize: 13,
           fontWeight: 800,
-          letterSpacing: '0.18em',
+          letterSpacing: '0.2em',
           textTransform: 'uppercase',
-          color: 'rgba(255,255,255,0.55)',
-          marginBottom: 16,
+          color: '#FF6600',
+          marginBottom: 20,
           textAlign: 'center',
         }}>
           Zay Meets World
@@ -62,117 +62,97 @@ export default function LandingPage() {
 
         {/* Headline */}
         <h1 style={{
-          fontSize: 'clamp(36px, 9vw, 64px)',
+          fontSize: 'clamp(38px, 9vw, 68px)',
           fontWeight: 800,
           color: '#fff',
-          lineHeight: 1.1,
-          letterSpacing: '-0.02em',
+          lineHeight: 1.08,
+          letterSpacing: '-0.025em',
           textAlign: 'center',
-          margin: '0 0 20px',
-          maxWidth: 560,
+          margin: '0 0 22px',
+          maxWidth: 580,
         }}>
-          Be part of something real.
+          Real life is still out there.
         </h1>
 
         {/* Body */}
         <p style={{
-          fontSize: 'clamp(15px, 3.5vw, 18px)',
-          color: 'rgba(255,255,255,0.8)',
-          lineHeight: 1.65,
+          fontSize: 'clamp(15px, 3.5vw, 17px)',
+          color: 'rgba(255,255,255,0.55)',
+          lineHeight: 1.7,
           textAlign: 'center',
-          maxWidth: 420,
-          margin: '0 0 48px',
+          maxWidth: 440,
+          margin: '0 0 44px',
           fontWeight: 400,
         }}>
-          We&apos;re traveling every state filming human connection no one talks about — the kindness, the stories, the people worth knowing. You&apos;re not just watching. You&apos;re the reason it happens.
+          We&apos;re hitting the road with nothing but a camera — carried by strangers, guided by the people who give a damn. This is a movement to prove that human connection is still alive, that we can still come together, and that real life is worth showing up for.
+          <br /><br />
+          <span style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>
+            You&apos;re not watching from the outside.
+          </span>
         </p>
 
-        {/* CTA cards */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 14,
-          width: '100%',
-          maxWidth: 400,
-        }}>
+        {/* Arrows */}
+        <div className="landing-arrows">
+          <span className="arrow-bounce">↓</span>
+          <span className="arrow-bounce-r">↓</span>
+        </div>
+
+        {/* Cards */}
+        <div className="landing-cards">
 
           {/* Join */}
-          <Link href="/join" style={{ textDecoration: 'none' }}>
+          <Link href="/join" className="landing-card landing-card-join">
+            <div style={{ fontSize: 30, marginBottom: 12 }}>🏃‍♂️</div>
             <div style={{
-              background: '#fff',
-              borderRadius: 20,
-              padding: '24px 24px 22px',
-              cursor: 'pointer',
-              transition: 'transform 0.18s, box-shadow 0.18s',
-              boxShadow: '0 4px 24px rgba(0,0,0,0.12)',
-            }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)'
-                ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.2)'
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'
-                ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 24px rgba(0,0,0,0.12)'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-                <div>
-                  <div style={{ fontSize: 28, marginBottom: 8 }}>🏃‍♂️</div>
-                  <div style={{ fontSize: 19, fontWeight: 800, color: '#0D0D0D', marginBottom: 6, letterSpacing: '-0.01em' }}>
-                    Join the journey
-                  </div>
-                  <div style={{ fontSize: 13, color: '#666', lineHeight: 1.55 }}>
-                    Send me somewhere. Spread love in your city. Get on the road with us.
-                  </div>
-                </div>
-                <div style={{
-                  fontSize: 20,
-                  color: '#FF6600',
-                  fontWeight: 800,
-                  flexShrink: 0,
-                  marginTop: 4,
-                }}>→</div>
-              </div>
+              fontSize: 18,
+              fontWeight: 800,
+              color: '#0D0D0D',
+              marginBottom: 8,
+              letterSpacing: '-0.01em',
+              lineHeight: 1.2,
+            }}>
+              Join the journey
+            </div>
+            <div style={{ fontSize: 13, color: '#666', lineHeight: 1.6, marginBottom: 18 }}>
+              Send me somewhere. Spread love in your city. Come be part of it.
+            </div>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              fontSize: 13,
+              fontWeight: 800,
+              color: '#FF6600',
+            }}>
+              I&apos;m in <span style={{ fontSize: 16 }}>→</span>
             </div>
           </Link>
 
           {/* Support */}
-          <Link href="/join?tab=support" style={{ textDecoration: 'none' }}>
+          <Link href="/join?tab=support" className="landing-card landing-card-back">
+            <div style={{ fontSize: 30, marginBottom: 12 }}>💛</div>
             <div style={{
-              background: 'rgba(0,0,0,0.18)',
-              borderRadius: 20,
-              padding: '24px 24px 22px',
-              cursor: 'pointer',
-              border: '1.5px solid rgba(255,255,255,0.25)',
-              transition: 'transform 0.18s, background 0.18s',
-            }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)'
-                ;(e.currentTarget as HTMLDivElement).style.background = 'rgba(0,0,0,0.28)'
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'
-                ;(e.currentTarget as HTMLDivElement).style.background = 'rgba(0,0,0,0.18)'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-                <div>
-                  <div style={{ fontSize: 28, marginBottom: 8 }}>💛</div>
-                  <div style={{ fontSize: 19, fontWeight: 800, color: '#fff', marginBottom: 6, letterSpacing: '-0.01em' }}>
-                    Back the movement
-                  </div>
-                  <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.55 }}>
-                    Help keep this going — for the road and the people on it.
-                  </div>
-                </div>
-                <div style={{
-                  fontSize: 20,
-                  color: 'rgba(255,255,255,0.7)',
-                  fontWeight: 800,
-                  flexShrink: 0,
-                  marginTop: 4,
-                }}>→</div>
-              </div>
+              fontSize: 18,
+              fontWeight: 800,
+              color: '#fff',
+              marginBottom: 8,
+              letterSpacing: '-0.01em',
+              lineHeight: 1.2,
+            }}>
+              Back the movement
+            </div>
+            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, marginBottom: 18 }}>
+              Help fuel the road and the good it creates along the way.
+            </div>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              fontSize: 13,
+              fontWeight: 800,
+              color: 'rgba(255,255,255,0.6)',
+            }}>
+              Support <span style={{ fontSize: 16 }}>→</span>
             </div>
           </Link>
 
@@ -186,8 +166,8 @@ export default function LandingPage() {
         textAlign: 'center',
         padding: '0 20px 28px',
       }}>
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', margin: 0 }}>
-          @zaymeetsworld · traveling to a place near you soon
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.2)', margin: 0 }}>
+          @zaymeetsworld · the road starts soon
         </p>
       </div>
 
