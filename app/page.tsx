@@ -80,6 +80,7 @@ export default function Page() {
 
   // Explore extras
   const [exploreCreator, setExploreCreator] = useState(false)
+  const [exploreCreatorIdea, setExploreCreatorIdea] = useState(false)
   const [exploreBrand, setExploreBrand] = useState(false)
 
   // Love extras
@@ -165,6 +166,7 @@ export default function Page() {
       creator_data: exploreCreator ? {
         platforms: exploreCreatorPlatforms,
         wants: exploreCreatorWants,
+        idea: fd(form, 'ec_idea'),
         ...contactFrom(form, 'ec_'),
       } : undefined,
       is_brand: exploreBrand,
@@ -437,11 +439,16 @@ export default function Page() {
                       <div className="field">
                         <label>I want to</label>
                         <div className="grid g2">
-                          {['Meet up in my city','Collab on content','Share the journey','Brand partnership'].map(v => (
-                            <Chip key={v} label={v} selected={exploreCreatorWants.includes(v)} onToggle={() => toggleECW(v)} />
+                          {['Meet up in my city','Collab on content','Share the journey','Brand partnership','Share an idea'].map(v => (
+                            <Chip key={v} label={v} selected={exploreCreatorWants.includes(v)} onToggle={() => { toggleECW(v); if (v === 'Share an idea') setExploreCreatorIdea(x => !x) }} />
                           ))}
                         </div>
                       </div>
+                      {exploreCreatorIdea && (
+                        <div className="field">
+                          <textarea name="ec_idea" placeholder="What's the idea? Collab, content, something you want to make happen on the road..." />
+                        </div>
+                      )}
                       <div className="field"><label>Name</label><input type="text" name="ec_name" placeholder="Your name" /></div>
                       <div className="field"><label>Email <span className="opt">or fill social below</span></label><input type="text" name="ec_email" placeholder="your@email.com" /></div>
                       <div className="field"><label>Social <span className="opt">or fill email above</span></label><input type="text" name="ec_social" placeholder="@handle" /></div>
