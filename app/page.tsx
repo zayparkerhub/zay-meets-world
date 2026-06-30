@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 
 /* ─────────────────────────── helpers ─────────────────────────── */
 
@@ -24,7 +24,7 @@ function ContactFields({ prefix = '' }: { prefix?: string }) {
       </div>
       <div className="field">
         <label>Email <span className="opt">or fill social below</span></label>
-        <input type="email" name={`${prefix}email`} placeholder="your@email.com" />
+        <input type="text" name={`${prefix}email`} placeholder="your@email.com" />
       </div>
       <div className="field">
         <label>Social <span className="opt">or fill email above</span></label>
@@ -203,6 +203,11 @@ export default function Page() {
     if (ok) setLoveSuccess(pathway)
   }
 
+  useEffect(() => {
+    document.body.classList.toggle('love-mode', tab === 'love')
+    return () => { document.body.classList.remove('love-mode') }
+  }, [tab])
+
   const switchTab = (t: 'explore' | 'love') => {
     setTab(t)
     setLovePathway(null)
@@ -277,7 +282,7 @@ export default function Page() {
               <div className="field"><label>What you make or sell</label><input type="text" name="lb_desc" placeholder="Brief description" /></div>
               <div className="field"><label>What kind of partnership?</label><textarea name="lb_partnership" style={{height:'80px'}} placeholder="Sponsoring acts, providing goods, co-creating content..." /></div>
               <div className="field"><label>Your name</label><input type="text" name="lb_name" placeholder="Who should we reach out to?" /></div>
-              <div className="field"><label>Email <span className="opt">or fill social below</span></label><input type="email" name="lb_email" placeholder="your@email.com" /></div>
+              <div className="field"><label>Email <span className="opt">or fill social below</span></label><input type="text" name="lb_email" placeholder="your@email.com" /></div>
               <div className="field"><label>Social <span className="opt">or fill email above</span></label><input type="text" name="lb_social" placeholder="@handle or brand handle" /></div>
               <div className="field"><label>Phone <span className="opt">optional</span></label><input type="tel" name="lb_phone" placeholder="(612) 000-0000" /></div>
               <div className="field-row">
@@ -294,7 +299,7 @@ export default function Page() {
 
   /* ─────────────────── render ─────────────────── */
   return (
-    <div className={tab === 'love' ? 'love-mode' : ''}>
+    <div>
 
       {/* Floating emojis */}
       <div className={`float-layer${tab === 'love' ? ' hidden' : ''}`}>
@@ -341,7 +346,7 @@ export default function Page() {
             </div>
           </div>
         ) : (
-          <form ref={exploreFormRef} onSubmit={submitExplore}>
+          <form ref={exploreFormRef} onSubmit={submitExplore} noValidate>
             <div className="form-wrap">
 
               <div className="step-card">
@@ -388,7 +393,7 @@ export default function Page() {
                 <div className="step-title">How do we reach you?</div>
                 <div className="step-sub">We write back personally when we&apos;re heading to your city.</div>
                 <div className="field"><label>Name</label><input type="text" name="name" placeholder="Your name" /></div>
-                <div className="field"><label>Email <span className="opt">or fill social below</span></label><input type="email" name="email" placeholder="your@email.com" /></div>
+                <div className="field"><label>Email <span className="opt">or fill social below</span></label><input type="text" name="email" placeholder="your@email.com" /></div>
                 <div className="field"><label>Social <span className="opt">or fill email above</span></label><input type="text" name="social" placeholder="@handle" /></div>
                 <div className="field"><label>Phone <span className="opt">optional</span></label><input type="tel" name="phone" placeholder="(612) 000-0000" /></div>
                 <div className="field">
@@ -433,7 +438,7 @@ export default function Page() {
                         </div>
                       </div>
                       <div className="field"><label>Name</label><input type="text" name="ec_name" placeholder="Your name" /></div>
-                      <div className="field"><label>Email <span className="opt">or fill social below</span></label><input type="email" name="ec_email" placeholder="your@email.com" /></div>
+                      <div className="field"><label>Email <span className="opt">or fill social below</span></label><input type="text" name="ec_email" placeholder="your@email.com" /></div>
                       <div className="field"><label>Social <span className="opt">or fill email above</span></label><input type="text" name="ec_social" placeholder="@handle" /></div>
                       <div className="field"><label>Phone <span className="opt">optional</span></label><input type="tel" name="ec_phone" placeholder="(612) 000-0000" /></div>
                       <div className="field-row">
@@ -457,7 +462,7 @@ export default function Page() {
                       <div className="field"><label>What you make or sell</label><input type="text" name="eb_desc" placeholder="Brief description" /></div>
                       <div className="field"><label>What kind of partnership?</label><textarea name="eb_partnership" style={{height:'80px'}} placeholder="Sponsoring a city visit, providing goods, co-creating content..." /></div>
                       <div className="field"><label>Your name</label><input type="text" name="eb_name" placeholder="Who should we reach out to?" /></div>
-                      <div className="field"><label>Email <span className="opt">or fill social below</span></label><input type="email" name="eb_email" placeholder="your@email.com" /></div>
+                      <div className="field"><label>Email <span className="opt">or fill social below</span></label><input type="text" name="eb_email" placeholder="your@email.com" /></div>
                       <div className="field"><label>Social <span className="opt">or fill email above</span></label><input type="text" name="eb_social" placeholder="@handle or brand handle" /></div>
                       <div className="field"><label>Phone <span className="opt">optional</span></label><input type="tel" name="eb_phone" placeholder="(612) 000-0000" /></div>
                       <div className="field-row">
@@ -514,7 +519,7 @@ export default function Page() {
                 </div>
               </div>
             ) : (
-              <form ref={sponsorFormRef} onSubmit={e => { e.preventDefault(); submitLove('sponsor', sponsorFormRef, { note: fd(sponsorFormRef.current, 'note') }) }} className="pf on">
+              <form ref={sponsorFormRef} onSubmit={e => { e.preventDefault(); submitLove('sponsor', sponsorFormRef, { note: fd(sponsorFormRef.current, 'note') }) }} className="pf on" noValidate>
                 <div className="step-card">
                   <span className="step-pill pill-l">Step 2</span>
                   <div className="step-title">Who are you?</div>
@@ -541,7 +546,7 @@ export default function Page() {
                 <div className="sb">When we&apos;re in your city, we&apos;re reaching out. Every act of love on this journey, yours might be one of them.</div>
               </div>
             ) : (
-              <form ref={communityFormRef} onSubmit={e => { e.preventDefault(); submitLove('community', communityFormRef, { acts: communityActs, description: fd(communityFormRef.current, 'description') }) }} className="pf on">
+              <form ref={communityFormRef} onSubmit={e => { e.preventDefault(); submitLove('community', communityFormRef, { acts: communityActs, description: fd(communityFormRef.current, 'description') }) }} className="pf on" noValidate>
                 <div className="step-card">
                   <span className="step-pill pill-l">Step 2</span>
                   <div className="step-title">What do you want to do?</div>
@@ -577,7 +582,7 @@ export default function Page() {
                 <div className="sb">Every act of love this journey makes happen, you helped make happen. We&apos;ll reach out if we&apos;re bringing your idea to life.</div>
               </div>
             ) : (
-              <form ref={ideaFormRef} onSubmit={e => { e.preventDefault(); submitLove('idea', ideaFormRef, { idea: fd(ideaFormRef.current, 'idea') }) }} className="pf on">
+              <form ref={ideaFormRef} onSubmit={e => { e.preventDefault(); submitLove('idea', ideaFormRef, { idea: fd(ideaFormRef.current, 'idea') }) }} className="pf on" noValidate>
                 <div className="step-card">
                   <span className="step-pill pill-l">Step 2</span>
                   <div className="step-title">What&apos;s the idea?</div>
@@ -608,7 +613,7 @@ export default function Page() {
                 <div className="sb">We&apos;ll check in in 3 days. Every act of love this journey collects, yours is part of it. Thank you for being in this with us.</div>
               </div>
             ) : (
-              <form ref={commitFormRef} onSubmit={e => { e.preventDefault(); submitLove('commit', commitFormRef, { acts: commitActs, own_act: fd(commitFormRef.current, 'own_act') }) }} className="pf on">
+              <form ref={commitFormRef} onSubmit={e => { e.preventDefault(); submitLove('commit', commitFormRef, { acts: commitActs, own_act: fd(commitFormRef.current, 'own_act') }) }} className="pf on" noValidate>
                 <div className="step-card">
                   <span className="step-pill pill-l">Step 2</span>
                   <div className="step-title">What will you do?</div>
