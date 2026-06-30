@@ -126,14 +126,18 @@ export default function Page() {
     }
   }
 
-  async function submit(payload: object) {
+  function hp(form: HTMLFormElement | null) {
+    return fd(form, 'website')
+  }
+
+  async function submit(payload: object, form?: HTMLFormElement | null) {
     setLoading(true)
     setErr('')
     try {
       const res = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, honeypot: hp(form ?? null) }),
       })
       if (!res.ok) throw new Error('Failed')
       return true
@@ -170,7 +174,7 @@ export default function Page() {
         partnership: fd(form, 'eb_partnership'),
         ...contactFrom(form, 'eb_'),
       } : undefined,
-    })
+    }, form)
     if (ok) setExploreSuccess(true)
   }
 
@@ -199,7 +203,7 @@ export default function Page() {
         partnership: fd(form, 'lb_partnership'),
         ...contactFrom(form, 'lb_'),
       } : undefined,
-    })
+    }, form)
     if (ok) setLoveSuccess(pathway)
   }
 
@@ -347,6 +351,7 @@ export default function Page() {
           </div>
         ) : (
           <form ref={exploreFormRef} onSubmit={submitExplore} noValidate>
+            <input type="text" name="website" tabIndex={-1} autoComplete="off" style={{display:'none'}} />
             <div className="form-wrap">
 
               <div className="step-card">
@@ -520,6 +525,7 @@ export default function Page() {
               </div>
             ) : (
               <form ref={sponsorFormRef} onSubmit={e => { e.preventDefault(); submitLove('sponsor', sponsorFormRef, { note: fd(sponsorFormRef.current, 'note') }) }} className="pf on" noValidate>
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" style={{display:'none'}} />
                 <div className="step-card">
                   <span className="step-pill pill-l">Step 2</span>
                   <div className="step-title">Who are you?</div>
@@ -547,6 +553,7 @@ export default function Page() {
               </div>
             ) : (
               <form ref={communityFormRef} onSubmit={e => { e.preventDefault(); submitLove('community', communityFormRef, { acts: communityActs, description: fd(communityFormRef.current, 'description') }) }} className="pf on" noValidate>
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" style={{display:'none'}} />
                 <div className="step-card">
                   <span className="step-pill pill-l">Step 2</span>
                   <div className="step-title">What do you want to do?</div>
@@ -583,6 +590,7 @@ export default function Page() {
               </div>
             ) : (
               <form ref={ideaFormRef} onSubmit={e => { e.preventDefault(); submitLove('idea', ideaFormRef, { idea: fd(ideaFormRef.current, 'idea') }) }} className="pf on" noValidate>
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" style={{display:'none'}} />
                 <div className="step-card">
                   <span className="step-pill pill-l">Step 2</span>
                   <div className="step-title">What&apos;s the idea?</div>
@@ -614,6 +622,7 @@ export default function Page() {
               </div>
             ) : (
               <form ref={commitFormRef} onSubmit={e => { e.preventDefault(); submitLove('commit', commitFormRef, { acts: commitActs, own_act: fd(commitFormRef.current, 'own_act') }) }} className="pf on" noValidate>
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" style={{display:'none'}} />
                 <div className="step-card">
                   <span className="step-pill pill-l">Step 2</span>
                   <div className="step-title">What will you do?</div>

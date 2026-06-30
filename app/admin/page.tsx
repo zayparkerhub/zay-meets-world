@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation'
 import { serverClient } from '@/lib/supabase'
 
 interface Submission {
@@ -20,24 +19,20 @@ interface Submission {
 export default async function AdminPage({
   searchParams,
 }: {
-  searchParams: Promise<{ key?: string; tab?: string }>
+  searchParams: Promise<{ tab?: string }>
 }) {
   const params = await searchParams
-  const key = params.key ?? ''
   const tabFilter = params.tab ?? 'all'
-
-  const adminKey = process.env.ADMIN_KEY ?? 'zmw-admin'
-  if (key !== adminKey) {
-    redirect('/admin/login')
-  }
 
   const db = serverClient()
 
   let query = db
     .from('submissions')
     .select('*')
+    .order('is_creator', { ascending: false })
+    .order('is_brand', { ascending: false })
     .order('created_at', { ascending: false })
-    .limit(200)
+    .limit(500)
 
   if (tabFilter !== 'all') {
     query = query.eq('tab', tabFilter)
@@ -48,7 +43,7 @@ export default async function AdminPage({
   if (error) {
     return (
       <div style={{ padding: '20px', fontFamily: 'system-ui', color: '#CC1F1F' }}>
-        Error loading submissions: {error.message}
+        Error: {error.message}
       </div>
     )
   }
@@ -56,10 +51,12 @@ export default async function AdminPage({
   const all = submissions as Submission[]
   const exploreCount = all.filter(s => s.tab === 'explore').length
   const loveCount = all.filter(s => s.tab === 'love').length
+  const creatorCount = all.filter(s => s.is_creator || s.is_brand).length
 
   function timeAgo(iso: string) {
     const diff = Date.now() - new Date(iso).getTime()
     const mins = Math.floor(diff / 60000)
+    if (mins < 1) return 'just now'
     if (mins < 60) return `${mins}m ago`
     const hrs = Math.floor(mins / 60)
     if (hrs < 24) return `${hrs}h ago`
@@ -69,11 +66,11 @@ export default async function AdminPage({
 
   function pathwayLabel(pathway: string) {
     const map: Record<string, string> = {
-      explore: '🏃‍♂️ Send me somewhere',
-      sponsor: '💛 Sponsor',
-      community: '🌍 Join in spreading love',
-      idea: '💡 Share an idea',
-      commit: '🤝 Make an act',
+      explore:   '🏃‍♂️ Send me somewhere',
+      sponsor:   '💛 Sponsor',
+      community: '🌍 Join spreading love',
+      idea:      '💡 Share an idea',
+      commit:    '🤝 Make an act',
     }
     return map[pathway] ?? pathway
   }
@@ -87,22 +84,25 @@ export default async function AdminPage({
           <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>
             Zay Meets World
           </div>
-          <div style={{ color: '#fff', fontSize: 20, fontWeight: 800, marginBottom: 12 }}>
-            Submissions {all.length > 0 && <span style={{ fontSize: 16, fontWeight: 600, opacity: 0.85 }}>({tabFilter === 'all' ? all.length : (tabFilter === 'explore' ? exploreCount : loveCount)})</span>}
+          <div style={{ color: '#fff', fontSize: 20, fontWeight: 800, marginBottom: 4 }}>
+            Submissions
+          </div>
+          <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: 12, marginBottom: 12 }}>
+            {all.length} total · {creatorCount} creators/brands
           </div>
 
           {/* Tab filter */}
-          <div style={{ display: 'flex', gap: 6 }}>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             {[
-              { value: 'all', label: `All (${all.length})` },
-              { value: 'explore', label: `🏃‍♂️ Explore (${exploreCount})` },
-              { value: 'love', label: `❤️ Love (${loveCount})` },
+              { value: 'all',     label: `All (${all.length})` },
+              { value: 'explore', label: `🏃‍♂️ (${exploreCount})` },
+              { value: 'love',    label: `❤️ (${loveCount})` },
             ].map(t => (
               <a
                 key={t.value}
-                href={`/admin?key=${key}&tab=${t.value}`}
+                href={`/admin?tab=${t.value}`}
                 style={{
-                  padding: '6px 12px',
+                  padding: '6px 14px',
                   borderRadius: 20,
                   fontSize: 12,
                   fontWeight: 700,
@@ -120,7 +120,7 @@ export default async function AdminPage({
       </div>
 
       {/* List */}
-      <div style={{ maxWidth: 480, margin: '0 auto', padding: '12px 16px 40px' }}>
+      <div style={{ maxWidth: 480, margin: '0 auto', padding: '12px 16px 60px' }}>
         {all.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px 20px', color: '#999' }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>📭</div>
@@ -139,20 +139,32 @@ export default async function AdminPage({
               {/* Top row */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
                 <div>
-                  <div style={{ fontWeight: 800, fontSize: 15, color: '#0D0D0D' }}>
-                    {s.name ?? <span style={{ color: '#aaa', fontWeight: 400 }}>Anonymous</span>}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                    <span style={{ fontWeight: 800, fontSize: 15, color: '#0D0D0D' }}>
+                      {s.name ?? <span style={{ color: '#aaa', fontWeight: 400 }}>Anonymous</span>}
+                    </span>
+                    {s.is_creator && (
+                      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 10, background: '#FFF0E6', color: '#FF6600' }}>
+                        🎬 CREATOR
+                      </span>
+                    )}
+                    {s.is_brand && (
+                      <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 10, background: '#E8F4FD', color: '#0066CC' }}>
+                        🏢 BRAND
+                      </span>
+                    )}
                   </div>
-                  <div style={{ fontSize: 11, color: s.tab === 'explore' ? '#FF6600' : '#CC1F1F', fontWeight: 700, marginTop: 2 }}>
+                  <div style={{ fontSize: 11, color: s.tab === 'explore' ? '#FF6600' : '#CC1F1F', fontWeight: 700, marginTop: 3 }}>
                     {pathwayLabel(s.pathway)}
                   </div>
                 </div>
-                <div style={{ fontSize: 11, color: '#aaa', textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontSize: 11, color: '#aaa', textAlign: 'right', flexShrink: 0, marginLeft: 8 }}>
                   {timeAgo(s.created_at)}
                 </div>
               </div>
 
               {/* Contact info */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px' }}>
                 {s.email && (
                   <a href={`mailto:${s.email}`} style={{ fontSize: 13, color: '#333', textDecoration: 'none' }}>
                     ✉️ {s.email}
@@ -179,28 +191,12 @@ export default async function AdminPage({
                   {Object.entries(s.data).map(([k, v]) => {
                     if (!v || (Array.isArray(v) && v.length === 0)) return null
                     return (
-                      <div key={k} style={{ fontSize: 12, color: '#555', marginBottom: 4 }}>
+                      <div key={k} style={{ fontSize: 12, color: '#555', marginBottom: 3 }}>
                         <span style={{ fontWeight: 700, textTransform: 'capitalize' }}>{k.replace(/_/g, ' ')}:</span>{' '}
                         {Array.isArray(v) ? v.join(', ') : String(v)}
                       </div>
                     )
                   })}
-                </div>
-              )}
-
-              {/* Badges */}
-              {(s.is_creator || s.is_brand) && (
-                <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
-                  {s.is_creator && (
-                    <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 10, background: '#FFF0E6', color: '#FF6600' }}>
-                      🎬 CREATOR
-                    </span>
-                  )}
-                  {s.is_brand && (
-                    <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 10, background: '#E8F4FD', color: '#0066CC' }}>
-                      🏢 BRAND
-                    </span>
-                  )}
                 </div>
               )}
             </div>
