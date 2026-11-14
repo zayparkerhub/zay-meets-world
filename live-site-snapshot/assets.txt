@@ -1,0 +1,15 @@
+https://zaymeetsworld.com/_next/static/chunks/07slv0cb5vd47.css
+https://zaymeetsworld.com/_next/static/media/5c285b27cdda1fe8-s.p.2_mbdogr7ni8i.woff2
+https://zaymeetsworld.com/_next/static/chunks/2c-ftvjj255-d.js
+https://zaymeetsworld.com/_next/static/chunks/11oof8oxnxiv9.js
+https://zaymeetsworld.com/_next/static/chunks/2tm_ycnwiyhv2.js
+https://zaymeetsworld.com/_next/static/chunks/08zogeljkpo3m.js
+https://zaymeetsworld.com/_next/static/chunks/27jktro2p5rq9.js
+https://zaymeetsworld.com/_next/static/chunks/turbopack-0q58szl_2jc67.js
+https://zaymeetsworld.com/_next/static/chunks/2nykiepra7i1k.js
+https://zaymeetsworld.com/_next/static/chunks/05-c3ty_6dwfk.js
+https://zaymeetsworld.com/_next/static/chunks/14mrh2-p_w84d.js
+https://zaymeetsworld.com/_next/static/chunks/3rdqn8rx95pw7.js
+https://zaymeetsworld.com/_vercel/insights/script.js
+https://zaymeetsworld.com/0a80e58ea84f909d/script.js
+https://zaymeetsworld.com/_next/static/chunks/0-o50exstwd9g.js
