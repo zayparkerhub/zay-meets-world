@@ -23,6 +23,8 @@ export default async function AdminPage({
 }) {
   const params = await searchParams
   const tabFilter = params.tab ?? 'all'
+  const isHire = (s: { pathway: string }) => s.pathway === 'hire'
+  const isXmas = (s: { pathway: string }) => s.pathway.startsWith('christmas')
 
   const db = serverClient()
 
@@ -34,7 +36,12 @@ export default async function AdminPage({
     .order('created_at', { ascending: false })
     .limit(500)
 
-  if (tabFilter !== 'all') {
+  query = query.neq('pathway', '_login_fail')
+  if (tabFilter === 'hire') {
+    query = query.eq('pathway', 'hire')
+  } else if (tabFilter === 'christmas') {
+    query = query.like('pathway', 'christmas%')
+  } else if (tabFilter !== 'all') {
     query = query.eq('tab', tabFilter)
   }
 
@@ -51,6 +58,8 @@ export default async function AdminPage({
   const all = submissions as Submission[]
   const exploreCount = all.filter(s => s.tab === 'explore').length
   const loveCount = all.filter(s => s.tab === 'love').length
+  const hireCount = all.filter(isHire).length
+  const xmasCount = all.filter(isXmas).length
   const creatorCount = all.filter(s => s.is_creator || s.is_brand).length
 
   function timeAgo(iso: string) {
@@ -71,6 +80,9 @@ export default async function AdminPage({
       community: '🌍 Join spreading love',
       idea:      '💡 Share an idea',
       commit:    '🤝 Make an act',
+      hire:      '🦸 Hire a Hero',
+      christmas_nominate: '🎄 Christmas nomination',
+      christmas_wish:     '⭐ Christmas wish',
     }
     return map[pathway] ?? pathway
   }
@@ -97,6 +109,8 @@ export default async function AdminPage({
               { value: 'all',     label: `All (${all.length})` },
               { value: 'explore', label: `🏃‍♂️ (${exploreCount})` },
               { value: 'love',    label: `❤️ (${loveCount})` },
+              { value: 'hire',    label: `🦸 (${hireCount})` },
+              { value: 'christmas', label: `🎄 (${xmasCount})` },
             ].map(t => (
               <a
                 key={t.value}
@@ -134,7 +148,7 @@ export default async function AdminPage({
               padding: '16px',
               marginBottom: 10,
               boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-              borderLeft: `4px solid ${s.tab === 'explore' ? '#FF6600' : '#CC1F1F'}`,
+              borderLeft: `4px solid ${isHire(s) ? '#0D0D0D' : isXmas(s) ? '#1E7A3C' : s.tab === 'explore' ? '#FF6600' : '#CC1F1F'}`,
             }}>
               {/* Top row */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
@@ -189,6 +203,7 @@ export default async function AdminPage({
               {s.data && Object.keys(s.data).length > 0 && (
                 <div style={{ marginTop: 10, padding: '10px 12px', background: '#F8F8F8', borderRadius: 10 }}>
                   {Object.entries(s.data).map(([k, v]) => {
+                    if (k.startsWith('_')) return null
                     if (!v || (Array.isArray(v) && v.length === 0)) return null
                     return (
                       <div key={k} style={{ fontSize: 12, color: '#555', marginBottom: 3 }}>

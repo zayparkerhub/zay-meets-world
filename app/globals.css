@@ -473,3 +473,17 @@ footer p { font-size:12px; color:rgba(255,255,255,0.4); }
   .field-row { grid-template-columns:1fr; }
   .toggle-btn { padding:12px 18px; font-size:13px; }
 }
+
+/* ── Hire a Hero / Christmas ── */
+.love-panel .rp.on { border-color: var(--love); background: #FDE8E8; }
+.back-link {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  margin-bottom: 20px;
+}
+.back-link:hover { color: #fff; }
+.landing-cards-more { margin-top: 14px; }
+.landing-card-mini { padding: 20px 22px; display: flex !important; align-items: center; gap: 14px; }

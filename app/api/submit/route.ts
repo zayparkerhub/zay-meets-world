@@ -19,10 +19,14 @@ async function sendTelegram(text: string) {
 
 function buildTelegramMessage(body: SubmissionPayload): string {
   const { tab, pathway, contact } = body
-  const tabLabel = tab === 'explore' ? '🏃‍♂️ Explore' : '❤️ Love'
+  const tabLabel =
+    pathway === 'hire' ? '🦸 Hire a Hero'
+    : pathway.startsWith('christmas') ? '🎄 Christmas'
+    : tab === 'explore' ? '🏃‍♂️ Explore' : '❤️ Love'
   const pathLabels: Record<string, string> = {
     explore: 'Send me somewhere', sponsor: 'Sponsor', community: 'Join spreading love',
     idea: 'Share an idea', commit: 'Make an act',
+    hire: 'New hero request', christmas_nominate: 'Nomination', christmas_wish: 'Own wish',
   }
 
   const lines = [
@@ -41,6 +45,17 @@ function buildTelegramMessage(body: SubmissionPayload): string {
   if (body.is_brand)   lines.push('🏢 Brand')
 
   const data = body.data as Record<string, unknown>
+  const list = (v: unknown) => Array.isArray(v) ? v.join(', ') : String(v)
+  if (data?.services)    lines.push(`\n🦸 ${list(data.services)}`)
+  if (data?.for_whom)    lines.push(`🎯 For: ${data.for_whom}${data.recipient ? ` (${data.recipient})` : ''}`)
+  if (data?.when)        lines.push(`📅 ${data.when}`)
+  if (data?.budget)      lines.push(`💵 ${data.budget}`)
+  if (data?.details)     lines.push(`\n📝 ${data.details}`)
+  if (data?.nominee)     lines.push(`\n🎁 Nominee: ${data.nominee}${data.relationship ? ` (${data.relationship})` : ''}`)
+  if (data?.nominee_location) lines.push(`📍 ${data.nominee_location}`)
+  if (data?.they_know)   lines.push(`🤫 They know: ${data.they_know}`)
+  if (data?.needs)       lines.push(`🎄 Needs: ${list(data.needs)}`)
+  if (data?.wish)        lines.push(`⭐ Wish: ${data.wish}`)
   if (data?.story)       lines.push(`\n📝 ${data.story}`)
   if (data?.idea)        lines.push(`\n💡 ${data.idea}`)
   if (data?.description) lines.push(`\n🌍 ${data.description}`)

@@ -171,6 +171,33 @@ export default function LandingPage() {
           </Link>
 
         </div>
+
+        {/* More ways */}
+        <div className="landing-cards landing-cards-more">
+          <Link href="/hire" className="landing-card landing-card-mini" style={{
+            background: '#FFF0E6',
+            border: '2px solid #FF6600',
+          }}>
+            <span style={{ fontSize: 30 }}>🦸</span>
+            <span>
+              <span style={{ display: 'block', fontSize: 16, fontWeight: 800, color: '#0D0D0D' }}>Hire a Hero →</span>
+              <span style={{ display: 'block', fontSize: 12, color: '#666', lineHeight: 1.5, marginTop: 2 }}>
+                Surprise someone, share a meal, or have a friend for the day.
+              </span>
+            </span>
+          </Link>
+          <Link href="/christmas" className="landing-card landing-card-mini" style={{
+            background: '#CC1F1F',
+          }}>
+            <span style={{ fontSize: 30 }}>🎄</span>
+            <span>
+              <span style={{ display: 'block', fontSize: 16, fontWeight: 800, color: '#fff' }}>Christmas Wishlist →</span>
+              <span style={{ display: 'block', fontSize: 12, color: 'rgba(255,255,255,0.75)', lineHeight: 1.5, marginTop: 2 }}>
+                Nominate someone who could use a little magic this year.
+              </span>
+            </span>
+          </Link>
+        </div>
       </div>
 
       {/* Footer */}
